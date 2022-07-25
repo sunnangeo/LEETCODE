@@ -238,7 +238,7 @@ Node * LINKEDLIST::copyRandomList(Node * head)
 	return map[head];
 }
 
-TreeNode* pre;
+extern TreeNode* pre;
 TreeNode* head;
 void dfs(TreeNode* cur) {
 	if (cur == NULL) return;
@@ -527,6 +527,7 @@ void test_426()
 	TreeNode *result = linkedlist.treeToDoublyList(tode4);
 
 }
+
 
 void test_2()
 {

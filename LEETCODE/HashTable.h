@@ -32,6 +32,7 @@ public:
 	int search(vector<int>& nums, int target);//34
 	int missingNumber(vector<int>& nums);//offer53
 	bool isIsomorphic(string s, string t);//205
+
 };
 
 extern HASHTABLE hashtable;

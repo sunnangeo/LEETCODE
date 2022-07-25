@@ -151,18 +151,28 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Array.cpp" />
+    <ClCompile Include="BackTracking.cpp" />
     <ClCompile Include="BinaryTree.cpp" />
+    <ClCompile Include="Greedy.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="HashTable.cpp" />
     <ClCompile Include="LinkedList.cpp" />
     <ClCompile Include="SORT.cpp" />
+    <ClCompile Include="Stack_Queue.cpp" />
     <ClCompile Include="String.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Array.h" />
+    <ClInclude Include="BackTracking.h" />
     <ClInclude Include="BinaryTree.h" />
+    <ClInclude Include="DynamicProgramming.cpp" />
+    <ClInclude Include="DynamicProgramming.h" />
+    <ClInclude Include="Greedy.h" />
     <ClInclude Include="HashTable.h" />
     <ClInclude Include="LinkedList.h" />
     <ClInclude Include="SORT.h" />
+    <ClInclude Include="Stack_Queue.h" />
     <ClInclude Include="String.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

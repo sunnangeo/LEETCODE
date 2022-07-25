@@ -565,6 +565,210 @@ TreeNode * BINARYTREE::mergeTrees(TreeNode * root1, TreeNode * root2)
 
 	return node;
 }
+int traverse_543(TreeNode* root, int &result) {
+	if (root->left == nullptr && root->right == nullptr) return 0;
+	int leftSize = root->left == nullptr ? 0 : traverse_543(root->left, result) + 1;
+	int rightSize = root->right == nullptr ? 0 : traverse_543(root->right, result) + 1;
+	result = max(result, leftSize + rightSize);
+	return max(leftSize, rightSize);
+}
+int BINARYTREE::diameterOfBinaryTree(TreeNode * root)
+{
+	if (root == nullptr) return 0;
+	int result = 0;
+	traverse_543(root, result);
+	return result;
+}
+int traverse_124(TreeNode* root, int &result) {
+	//result += root->val;
+	if (root == nullptr) return 0;
+
+	int leftValue = max(0, traverse_124(root->left, result));
+	int rightValue = max(0, traverse_124(root->right, result));
+
+	result = max(result, root->val + leftValue + rightValue);
+	return max(leftValue, rightValue) + root->val;
+}
+int BINARYTREE::maxPathSum(TreeNode * root)
+{
+	int result = INT_MIN;
+	if (root == nullptr) return result;
+	traverse_124(root, result);
+	return result;
+}
+int traverse_687(TreeNode* root, int &result) {
+	if (root->left == nullptr && root->right == nullptr) return 0;
+
+	int leftSize = root->left == nullptr ? 0 : traverse_687(root->left, result) + 1;
+	int rightSize = root->right == nullptr ? 0 : traverse_687(root->right, result) + 1;
+	if (leftSize > 0 && root->val != root->left->val) leftSize = 0;
+	if (rightSize > 0 && root->val != root->right->val) rightSize = 0;
+
+	result = max(result, leftSize + rightSize);
+	return max(leftSize, rightSize);
+
+}
+int BINARYTREE::longestUnivaluePath(TreeNode * root)
+{
+	int result = 0;
+	if (root == nullptr) return 0;
+	traverse_687(root, result);
+	return result;
+}
+
+TreeNode * BINARYTREE::searchBST(TreeNode * root, int val)
+{
+	if (root == nullptr || root->val == val) return root;
+	if (root->val > val) return searchBST(root->left, val);
+	if (root->val < val) return searchBST(root->right, val);
+	return nullptr;
+}
+//TreeNode* pre = nullptr;
+TreeNode* pre = nullptr;
+bool BINARYTREE::isValidBST(TreeNode * root)
+{
+	if (root == nullptr) return true;
+
+	bool left = isValidBST(root->left);
+
+	if (pre != nullptr && pre->val >= root->val) return false;
+	pre = root;
+
+	bool right = isValidBST(root->right);
+
+	return left && right;
+}
+void traverse_530(TreeNode* root, int &result) {
+	if (root == nullptr) return;
+	traverse_530(root->left, result);
+
+	if (pre != nullptr) result = min(result, root->val - pre->val);
+	pre = root;
+
+	traverse_530(root->right, result);
+}
+int BINARYTREE::getMinimumDifference(TreeNode * root)
+{
+	int result = INT_MAX;
+	traverse_530(root, result);
+	return result;
+}
+void traverse_501(TreeNode* root, unordered_map<int, int>& map) {
+	if (root == nullptr) return;
+
+	traverse_501(root->left, map);
+
+	map[root->val]++;
+
+	traverse_501(root->right, map);
+}
+vector<int> BINARYTREE::findMode(TreeNode * root)
+{
+	vector<int> result;
+	int count = 0;
+	unordered_map<int, int> map;
+	traverse_501(root, map);
+
+
+	for (auto num : map) {
+		if (count <= num.second) {
+			count = num.second;
+			result.push_back(num.first);
+		}
+	}
+	return result;
+}
+
+TreeNode * BINARYTREE::lowestCommonAncestor(TreeNode * root, TreeNode * p, TreeNode * q)
+{
+	if (root == NULL || root == p || root == q) return root;
+
+	TreeNode* left = lowestCommonAncestor(root->left, p, q);
+	TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+	if (left != NULL && right != NULL) return root;
+
+	return left == nullptr ? right : left;
+}
+
+TreeNode * BINARYTREE::insertIntoBST(TreeNode * root, int val)
+{
+	if (root == nullptr) {
+		return new TreeNode(val);
+	}
+	if (root->val > val) {
+		root->left = insertIntoBST(root->left, val);
+	}
+
+	if (root->val < val) {
+		root->right = insertIntoBST(root->right, val);
+	}
+	return root;
+}
+
+TreeNode * BINARYTREE::deleteNode(TreeNode * root, int key)
+{
+	if (root == nullptr) return root;
+
+	if (root->val == key) {
+		if (root->left == nullptr && root->right == nullptr) {
+			delete root;
+			return nullptr;
+		}
+		else if (root->left == nullptr) {
+			auto retnode = root->right;
+			delete root;
+			return retnode;
+		}
+		else if (root->right == nullptr) {
+			auto retnode = root->left;
+			delete root;
+			return retnode;
+		}
+		else {
+			TreeNode* cur = root->right;
+			while (cur->left != nullptr) {
+				cur = cur->left;
+			}
+			cur->left = root->left;
+			auto retnode = root->right;
+			delete root;
+			return retnode;
+		}
+	}
+	if (root->val > key) root->left = deleteNode(root->left, key);
+	if (root->val < key) root->right = deleteNode(root->right, key);
+	return root;
+}
+TreeNode* traverse_108(vector<int>& nums, int left, int right) {
+	if (left > right) return nullptr;
+	int mid = left + (right - left) / 2;
+	TreeNode* root = new TreeNode(nums[mid]);
+	root->left = traverse_108(nums, left, mid - 1);
+	root->right = traverse_108(nums, mid + 1, right);
+	return root;
+}
+TreeNode * BINARYTREE::sortedArrayToBST(vector<int>& nums)
+{
+	TreeNode* root = traverse_108(nums, 0, nums.size() - 1);
+	return root;
+}
+
+TreeNode * BINARYTREE::lowestCommonAncestorbst(TreeNode * root, TreeNode * p, TreeNode * q)
+{
+	while (root) {
+		if (root->val > p->val && root->val > q->val) {
+			root = root->left;
+		}
+		else if (root->val < p->val && root->val < q->val) {
+			root = root->right;
+		}
+		else {
+			return root;
+		}
+	}
+	return NULL;
+}
 
 int BINARYTREE::sumOfLeftLeaves(TreeNode * root)
 {
@@ -691,6 +895,10 @@ void test_offer33()
 {
 }
 
+void test_297()
+{
+}
+
 void test_226()
 {
 }
@@ -779,5 +987,83 @@ void test_617()
 }
 
 void test_543()
+{
+}
+
+void test_124()
+{
+}
+
+void test_687()
+{
+}
+
+void test_700()
+{
+}
+
+void test_98()
+{
+}
+
+void test_530()
+{
+}
+
+void test_501()
+{
+	TreeNode* node1 = new TreeNode(1);
+	TreeNode* node2 = new TreeNode(1);
+	TreeNode* node3 = new TreeNode(2);
+
+	node1->left = node2;
+	node1->right = node3;
+
+
+	vector<int> result = binarytree.findMode(node1);
+}
+
+void test_236()
+{
+}
+
+void test_235()
+{
+}
+
+void test_701()
+{
+	TreeNode* node1 = new TreeNode(4);
+	TreeNode* node2 = new TreeNode(2);
+	TreeNode* node3 = new TreeNode(7);
+	TreeNode* node4 = new TreeNode(1);
+	TreeNode* node5 = new TreeNode(3);
+
+	node1->left = node2;
+	node1->right = node3;
+	node2->left = node4;
+	node2->right = node5;
+
+	int val = 5;
+	TreeNode* result = binarytree.insertIntoBST(node1,val);
+}
+
+void test_450()
+{
+}
+
+void test_669()
+{
+}
+
+void test_108()
+{
+}
+
+void test_538()
+{
+}
+
+void test_offer54()
 {
 }

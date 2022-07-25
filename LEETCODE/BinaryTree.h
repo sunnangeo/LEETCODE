@@ -64,7 +64,52 @@ struct TreeNode {
 	TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
 	TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
 };
+class Codec {
+public:
 
+	// Encodes a tree to a single string.
+	string serialize(TreeNode* root) {
+		if (root == NULL) return "null,";
+		string res = to_string(root->val) + ",";
+		res += serialize(root->left);
+		res += serialize(root->right);
+
+		return res;
+	}
+	TreeNode* redeserialize(queue<string> & que) {
+		string value = que.front();
+		if (value == "null") {
+			que.pop();
+			return NULL;
+		}
+		que.pop();
+		TreeNode* head = new TreeNode(atoi(value.c_str()));
+		head->left = redeserialize(que);
+		head->right = redeserialize(que);
+
+		return head;
+
+	}
+	// Decodes your encoded data to tree.
+	TreeNode* deserialize(string data) {
+		queue<string> que;
+		string str;
+		for (auto c : data) {
+			if (c == ',') {
+				que.push(str);
+				str.clear();
+			}
+			else {
+				str.push_back(c);
+			}
+		}
+		if (str.size() != 0) {
+			que.push(str);
+		}
+
+		return redeserialize(que);
+	}
+};
 
 class BINARYTREE
 {
@@ -100,7 +145,19 @@ public:
 	TreeNode* buildTree(int p, vector<int>& preorder, vector<int>& inorder);//105
 	TreeNode* constructMaximumBinaryTree(vector<int>& nums);//654
 	TreeNode* mergeTrees(TreeNode* root1, TreeNode* root2);//617
+	int diameterOfBinaryTree(TreeNode* root);//543
+	int maxPathSum(TreeNode* root);//124
+	int longestUnivaluePath(TreeNode* root);//687
 
+	TreeNode* searchBST(TreeNode* root, int val);//700
+	bool isValidBST(TreeNode* root);//98
+	int getMinimumDifference(TreeNode* root);//530
+	vector<int> findMode(TreeNode* root);//501
+	TreeNode* lowestCommonAncestorbst(TreeNode* root, TreeNode* p, TreeNode* q);//235
+	TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q);//236
+	TreeNode* insertIntoBST(TreeNode* root, int val);//701
+	TreeNode* deleteNode(TreeNode* root, int key);//450
+	TreeNode* sortedArrayToBST(vector<int>& nums);//108
 };
 
 extern BINARYTREE binarytree;
@@ -141,6 +198,8 @@ void test_105();//从前序与中序遍历序列构造二叉树 | 剑指 Offer 07. 重建二叉树
 void test_654();//最大二叉树
 void test_617();//合并二叉树
 void test_543();//二叉树的直径
+void test_124();//二叉树中的最大路径和
+void test_687();//最长同值路径
 
 void test_700();//二叉搜索树中的搜索
 void test_98();//验证二叉搜索树
@@ -153,8 +212,8 @@ void test_450();//删除二叉搜索树中的节点
 void test_669();//修剪二叉搜索树
 void test_108();//将有序数组转换为二叉搜索树
 void test_538();//把二叉搜索树转换为累加树
-void test_426();//剑指 Offer 36. 二叉搜索树与双向链表
 void test_offer54();//剑指 Offer 54. 二叉搜索树的第k大节点
 void test_offer33();//剑指 Offer 33. 二叉搜索树的后序遍历序列
+void test_297();//剑指 Offer 37. 序列化二叉树
 
 

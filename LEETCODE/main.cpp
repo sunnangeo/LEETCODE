@@ -10,7 +10,7 @@
 using namespace std;
 int main()
 {
-	test_404();
+	test_bubblesort();
 	system("pause");
 	return 0;
 }
